@@ -6,6 +6,7 @@ import { setSidebarOn } from '../../store/sidebarSlice';
 import { getAllCategories } from '../../store/categorySlice';
 import { getAllCarts, getCartItemsCount, getCartTotal } from '../../store/cartSlice';
 import CartModal from "../CartModal/CartModal";
+import {AiOutlineSearch, AiOutlineShoppingCart} from 'react-icons/ai'
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -45,8 +46,8 @@ const Navbar = () => {
             <div className='flex align-center'>
               <input type = "text" className='form-control fs-14' placeholder='Search your preferred items here' onChange={(e) => handleSearchTerm(e)} />
               <Link to = {`search/${searchTerm}`} className='text-white search-btn flex align-center justify-center'>
-                  <i className='fa-solid fa-magnifying-glass'></i>
-                </Link>
+                <AiOutlineSearch />
+              </Link>
             </div>
           </div>
 
@@ -64,7 +65,7 @@ const Navbar = () => {
 
         <div className='navbar-cart flex align-center'>
           <Link to = "/cart" className='cart-btn'>
-            <i className='fa-solid fa-cart-shopping'></i>
+            <AiOutlineShoppingCart />
             <div className='cart-items-value'>{itemsCount}</div>
             <CartModal carts = {carts} />
           </Link>
