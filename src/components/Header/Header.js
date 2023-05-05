@@ -2,6 +2,7 @@ import React from 'react';
 import "./Header.scss";
 import {Link} from 'react-router-dom';
 import Navbar from "../Navbar/Navbar";
+import {BsFacebook, BsInstagram} from 'react-icons/bs'
 
 const Header = () => {
   return (
@@ -23,15 +24,15 @@ const Header = () => {
                 <li className='vert-line'></li>
                 <li className='flex align-center'>
                   <span className='fs-13'>Follow us on</span>
-                  <ul className='social-links flex align-center'>
+                  <ul className='social-links flex align-center '>
                     <li className='mx-2'>
                       <a href = "www.facebook.com" className='fs-15'>
-                        <i className='fab fa-facebook'></i>
+                      <BsFacebook />
                       </a>
                     </li>
                     <li className='mx-2'>
                       <a href = "www.instagram.com" className='fs-15'>
-                        <i className='fab fa-instagram'></i>
+                      <BsInstagram />
                       </a>
                     </li>
                   </ul>
@@ -58,6 +59,12 @@ const Header = () => {
                 <li>
                   <Link to = "/login">
                     <span className='top-link-itm-txt'>Log in</span>
+                  </Link>
+                </li>
+                <li className='vert-line'></li>
+                <li>
+                  <Link to = "/profile">
+                    <span className='top-link-itm-txt'>Profile</span>
                   </Link>
                 </li>
               </ul>

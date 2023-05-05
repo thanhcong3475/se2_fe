@@ -18,6 +18,9 @@ function Register() {
       console.log(
         'success'
       )
+      localStorage.setItem('name', Name)
+      localStorage.setItem('email', Email)
+      localStorage.setItem('password', Password)
     } catch (err) {
       console.error(err)
     }

@@ -9,6 +9,8 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Footer from "./components/Footer/Footer";
 import store from "./store/store";
 import {Provider} from "react-redux";
+import Profile from './pages/Profile/Profile';
+import Checkout from './pages/Checkout/Checkout';
 
 function App() {
   return (
@@ -33,6 +35,11 @@ function App() {
             <Route path = "/login" element = {<Login />} />
              {/* register */}
              <Route path = "/register" element = {<Register />} />
+             {/* Profile */}
+             <Route path = "/profile" element = {<Profile />} />
+             {/* Checkout */}
+             <Route path = "/checkout" element = {<Checkout />} />
+
           </Routes>
 
           <Footer />
