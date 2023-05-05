@@ -3,7 +3,7 @@ import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCar
 
 export default function Profile() {
     const name = localStorage.getItem('name')
-    const password = localStorage.getItem('password')
+    // const password = localStorage.getItem('password')
     const email = localStorage.getItem('email')
   return (
     <section className="vh-100" style={{ backgroundColor: '#f4f5f7' }}>

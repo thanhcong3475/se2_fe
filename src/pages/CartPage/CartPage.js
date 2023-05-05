@@ -107,7 +107,7 @@ const CartPage = () => {
                 <span className='text-orange fs-22 mx-2 fw-6'>{formatPrice(totalAmount)}</span>
               </div>
 
-              <button type = "button" className='checkout-btn text-white bg-orange fs-16'>Check Out</button>
+              <Link to={'/checkout'} type = "button" className='checkout-btn text-white bg-orange fs-16' >Check Out</Link>
             </div>
           </div>
         </div>

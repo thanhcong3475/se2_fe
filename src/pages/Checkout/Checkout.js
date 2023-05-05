@@ -1,19 +1,20 @@
 import React, {useEffect, useState} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+import swal from 'sweetalert';
+import './Checkout.scss'
 import { useNavigate } from 'react-router-dom';
+import { getAllCarts, removeFromCart, toggleCartQty, clearCart, getCartTotal } from '../../store/cartSlice';
 
 
 function Checkout()
 {
-  const navigate = useNavigate()
 
-    if(!localStorage.getItem('auth_token')){
-      navigate('/');
-    }
-    
+    const navigate = useNavigate();
+    const carts = useSelector(getAllCarts);
     const [loading, setLoading] = useState(true);
-    const [cart, setCart] = useState([]);
+    const [cart, setCart] = useState([carts]);
     var totalCartPrice = 0;
 
     const [checkoutInput, setCheckoutInput] = useState({
@@ -42,7 +43,8 @@ function Checkout()
                 }
                 else if(res.data.status === 401)
                 {
-                  navigate.push('/');
+                    navigate('/');
+                    swal("Warning",res.data.message,"error");
                 }
             }
         }); 
@@ -50,8 +52,7 @@ function Checkout()
         return () => {
             isMounted = false
         };
-    }, []);
-
+    }, [] )   
     const handleInput = (e) => {
         e.persist();
         setCheckoutInput({...checkoutInput, [e.target.name]: e.target.value });
@@ -70,39 +71,6 @@ function Checkout()
         payment_id: '',
     }
 
-    // Paypal Code
-    const createOrder = (data, actions) =>{
-        return actions.order.create({
-          purchase_units: [
-            {
-              amount: {
-                value: totalCartPrice,
-              },
-            },
-          ],
-        });
-    };
-    const onApprove = (data, actions) => {
-        // return actions.order.capture();
-        return actions.order.capture().then(function(details) {
-            console.log(details);
-            orderinfo_data.payment_id = details.id;
-
-            axios.post(`/api/place-order`, orderinfo_data).then(res=>{
-                if(res.data.status === 200)
-                {
-                    setError([]);
-                    navigate('/thank-you');
-                }
-                else if(res.data.status === 422)
-                {
-                    setError(res.data.errors);
-                }
-            });
-        });
-    };
-    // End-Paypal Code
-
     const submitOrder = (e, payment_mode) => {
         e.preventDefault();
 
@@ -120,21 +88,7 @@ function Checkout()
         }
 
         switch (payment_mode) {
-            case 'cod':
-                axios.post(`/api/place-order`, data).then(res=>{
-                    if(res.data.status === 200)
-                    {
-                        setError([]);
-                        navigate('/thank-you');
-                    }
-                    else if(res.data.status === 422)
-                    {
-                        setError(res.data.errors);
-                    }
-                });
-                break;
-
-            case 'razorpay':
+            case 'zalopay':
                 axios.post(`/api/validate-order`, data).then(res=>{
                     if(res.data.status === 200)
                     {
@@ -151,7 +105,8 @@ function Checkout()
                                 axios.post(`/api/place-order`, data).then(place_res=>{
                                     if(place_res.data.status === 200)
                                     {
-                                      navigate('/thank-you');
+                                        swal("Order Placed Successfully",place_res.data.message,"success");
+                                        navigate('/thank-you');
                                     }
                                 });
                             },
@@ -169,6 +124,7 @@ function Checkout()
                     }
                     else if(res.data.status === 422)
                     {
+                        swal("All fields are mandetory","","error");
                         setError(res.data.errors);
                     }
                 });
@@ -184,6 +140,7 @@ function Checkout()
                     }
                     else if(res.data.status === 422)
                     {
+                        swal("All fields are mandetory","","error");
                         setError(res.data.errors);
                     }
                 });
@@ -195,7 +152,7 @@ function Checkout()
        
     }
 
-    if(loading)
+    if(!loading)
     {
         return <h4>Loading Checkout...</h4>
     }
@@ -211,10 +168,10 @@ function Checkout()
                     <div className="card-header">
                         <h4>Basic Information</h4>
                     </div>
-                    <div className="card-body">
+                    <div className="card-body container">
 
                         <div className="row">
-                            <div className="col-md-6">
+                            <div className="col-6">
                                 <div className="form-group mb-3">
                                     <label> First Name</label>
                                     <input type="text" name="firstname" onChange={handleInput} value={checkoutInput.firstname} className="form-control" />
@@ -272,8 +229,7 @@ function Checkout()
                             </div>
                             <div className="col-md-12">
                                 <div className="form-group text-end">
-                                    <button type="button" className="btn btn-primary mx-1" onClick={ (e) => submitOrder(e, 'cod') }>Place Order</button>
-                                    <button type="button" className="btn btn-primary mx-1" onClick={ (e) => submitOrder(e, 'razorpay') }>Pay by Razorpay</button>
+                                    <button type="button" className="btn btn-primary mx-1" onClick={ (e) => submitOrder(e, 'zalopay') }>Pay by zalopay</button>
                                     <button type="button" className="btn btn-warning mx-1" onClick={ (e) => submitOrder(e, 'payonline') }>Pay Online</button>
 
                                 </div>
@@ -282,36 +238,6 @@ function Checkout()
 
                     </div>
                 </div>
-            </div>
-
-            <div className="col-md-5">
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th width="50%">Product</th>
-                            <th>Price</th>
-                            <th>Qty</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {cart.map( (item, idx) => {
-                            totalCartPrice += item.product.selling_price * item.product_qty;
-                            return (
-                                <tr key={idx}>
-                                    <td>{item.product.name}</td>
-                                    <td>{item.product.selling_price}</td>
-                                    <td>{item.product_qty}</td>
-                                    <td>{item.product.selling_price * item.product_qty}</td>
-                                </tr>
-                            )
-                        })}
-                        <tr>
-                            <td colSpan="2" className="text-end fw-bold">Grand Total</td>
-                            <td colSpan="2" className="text-end fw-bold">{totalCartPrice}</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
 
             </div>
@@ -338,16 +264,12 @@ function Checkout()
                     </div>
                     <div class="modal-body">
                         <hr/>
-                        
                     </div>
                     </div>
                 </div>
             </div>
 
             <div className="py-3 bg-warning">
-                <div className="container">
-                    <h6>Home / Checkout</h6>
-                </div>
             </div>
 
             <div className="py-4">

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./HomePage.scss";
 import HeaderSlider from "../../components/Slider/HeaderSlider";
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,26 +10,59 @@ import { STATUS } from '../../utils/status';
 
 const HomePage = () => {
   const dispatch = useDispatch();
+  const [products, setProducts] = useState(useSelector(getAllProducts))
   const categories = useSelector(getAllCategories);
-
-  useEffect(() => {
-    dispatch(fetchAsyncProducts(50));
-  }, []);
-
-  const products = useSelector(getAllProducts);
   const productStatus = useSelector(getAllProductsStatus);
 
-  // randomizing the products in the list
-  const tempProducts = [];
-  if(products.length > 0){
-    for(let i in products){
-      let randomIndex = Math.floor(Math.random() * products.length);
+  useEffect(() => {
+    dispatch(fetchAsyncProducts(50));  
+  }, []);
 
-      while(tempProducts.includes(products[randomIndex])){
-        randomIndex = Math.floor(Math.random() * products.length);
-      }
-      tempProducts[i] = products[randomIndex];
-    }
+  // let products = useSelector(getAllProducts);
+  // setProducts(products )
+  
+  const handleSortByNameAtoZ = () => {
+    let productCopy = [...products]
+    productCopy.sort((a, b) => {
+      let title1 = a.title
+      let title2 = b.title
+      return (title1).localeCompare(title2)
+    })
+    setProducts(productCopy)
+    // products = productss
+  }
+
+  const handleSortByNameZtoA = () => {
+    const productCopy = [...products]
+    productCopy.sort((a, b) => {
+      let title1 = a.title
+      let title2 = b.title
+      return (title2).localeCompare(title1)
+    })
+    setProducts(productCopy)
+    // products = productss
+  }
+
+  const handleSortByPriceLowest = () => {
+    const productCopy = [...products]
+    productCopy.sort((a, b) => {
+      let priceA = (a.price) - (a.price * (a.discountPercentage / 100))
+      let priceB = (b.price) - (b.price * (b.discountPercentage / 100))
+      return (priceA) - (priceB)
+    })
+    setProducts(productCopy)
+    // products = productss
+  }
+
+  const handleSortByPriceHighest = () => {
+    const productCopy = [...products]
+    productCopy.sort((a, b) => {
+      let priceA = (a.price) - (a.price * (a.discountPercentage / 100))
+      let priceB = (b.price) - (b.price * (b.discountPercentage / 100))
+      return (priceB) - (priceA)
+    })
+    setProducts(productCopy)
+    // products = productss
   }
 
   let catProductsOne = products.filter(product => product.category === categories[0]);
@@ -48,8 +81,16 @@ const HomePage = () => {
             <div className='categories-item'>
               <div className='title-md'>
                 <h3>See our products</h3>
+                <div class="dropdown">
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" onClick={handleSortByNameAtoZ}>a to z</a></li>
+    <li><a class="dropdown-item" onClick={handleSortByNameZtoA}>z to a</a></li>
+    <li><a class="dropdown-item" onClick={handleSortByPriceLowest}>price (lowest)</a></li>
+    <li><a class="dropdown-item" onClick={handleSortByPriceHighest}>price (highest)</a></li>
+  </ul>
+</div>
               </div>
-              { productStatus === STATUS.LOADING ? <Loader /> : <ProductList products = {tempProducts} />}
+              { productStatus === STATUS.LOADING ? <Loader /> : <ProductList products = {products} />}
             </div>
 
             <div className='categories-item'>
