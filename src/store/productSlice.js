@@ -50,13 +50,6 @@ export const fetchAsyncProducts = createAsyncThunk('products/fetch', async(limit
     return data.products;
 });
 
-export const fetchAsyncProductsSortedByName = createAsyncThunk('products/fetch', async(limit) => {
-    const response = await fetch(`${BASE_URL}products?limit=${limit}`);
-    const data = await response.json();
-    const result = data.sort((a, b) => a.title.localCompare(b.title))
-    return result.products;
-});
-
 // getting the single product data also
 export const fetchAsyncProductSingle = createAsyncThunk('product-single/fetch', async(id) => {
     const response = await fetch(`${BASE_URL}products/${id}`);
