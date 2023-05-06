@@ -10,7 +10,8 @@ import { STATUS } from '../../utils/status';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const [products, setProducts] = useState(useSelector(getAllProducts))
+  let productss = useSelector(getAllProducts);
+  const [products, setProducts] = useState(productss)
   const categories = useSelector(getAllCategories);
   const productStatus = useSelector(getAllProductsStatus);
 
@@ -18,17 +19,17 @@ const HomePage = () => {
     dispatch(fetchAsyncProducts(20));  
   }, []);
 
-  // let products = useSelector(getAllProducts);
-  // setProductss(products )
+  // setProductss(products)
   
   const handleSortByNameAtoZ = () => {
-    let productCopy = [...products]
+    let productCopy = [...productss]
     productCopy.sort((a, b) => {
       let title1 = a.title
       let title2 = b.title
       return (title1).localeCompare(title2)
     })
     setProducts(productCopy)
+    // products = productCopy
     // products = productss
   }
 
