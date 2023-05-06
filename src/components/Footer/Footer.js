@@ -11,7 +11,7 @@ const Footer = () => {
           <div className='vert-line'></div>
           <Link to = "/" className='text-uppercase'>term of service</Link>
           <div className='vert-line'></div>
-          <Link to = "/" className='text-uppercase'>About SnapUp.</Link>
+          <Link to = "/" className='text-uppercase'>About We</Link>
         </div>
       </div>
     </footer>

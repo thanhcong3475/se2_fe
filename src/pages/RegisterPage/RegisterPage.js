@@ -34,7 +34,7 @@ function Register() {
         <input type="text"  placeholder="Name" value={Name} onChange={(event) => {setName(event.target.value)}} />
         <input type="email" placeholder="Email" value={Email} onChange={(event) => {setEmail(event.target.value)}}/>
         <input type="password" placeholder="Password" value={Password} onChange={(event) => {setPassword(event.target.value)}}/>
-        <button type={"submit"} onClick={save} style={{ backgroundColor: "#a1eafb" }} />
+        <button type={"submit"} onClick={save} style={{ backgroundColor: "#a1eafb" }}> Submit</button> 
       </form>
       
     </>

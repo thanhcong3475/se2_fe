@@ -10,16 +10,16 @@ import { STATUS } from '../../utils/status';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const [products, setProducts] = useState(useSelector(getAllProducts))
+  const [productss, setProductss] = useState(useSelector(getAllProducts))
   const categories = useSelector(getAllCategories);
   const productStatus = useSelector(getAllProductsStatus);
 
   useEffect(() => {
-    dispatch(fetchAsyncProducts(50));  
+    dispatch(fetchAsyncProducts(20));  
   }, []);
 
-  // let products = useSelector(getAllProducts);
-  // setProducts(products )
+  let products = useSelector(getAllProducts);
+  // setProductss(products )
   
   const handleSortByNameAtoZ = () => {
     let productCopy = [...products]
@@ -28,7 +28,7 @@ const HomePage = () => {
       let title2 = b.title
       return (title1).localeCompare(title2)
     })
-    setProducts(productCopy)
+    setProductss(productCopy)
     // products = productss
   }
 
@@ -39,7 +39,7 @@ const HomePage = () => {
       let title2 = b.title
       return (title2).localeCompare(title1)
     })
-    setProducts(productCopy)
+    setProductss(productCopy)
     // products = productss
   }
 
@@ -50,7 +50,7 @@ const HomePage = () => {
       let priceB = (b.price) - (b.price * (b.discountPercentage / 100))
       return (priceA) - (priceB)
     })
-    setProducts(productCopy)
+    setProductss(productCopy)
     // products = productss
   }
 
@@ -61,7 +61,7 @@ const HomePage = () => {
       let priceB = (b.price) - (b.price * (b.discountPercentage / 100))
       return (priceB) - (priceA)
     })
-    setProducts(productCopy)
+    setProductss(productCopy)
     // products = productss
   }
 
