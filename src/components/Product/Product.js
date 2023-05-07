@@ -27,7 +27,7 @@ const Product = ({product}) => {
               {formatPrice(product?.discountedPrice)}
             </span>
             <span className='discount fw-6'>
-              ({product?.discountedPercentage}% Off)
+              ({Math.round(product?.discountPercentage)}% Off)
             </span>
           </div>
         </div>

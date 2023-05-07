@@ -22,11 +22,11 @@ const HeaderSlider = () => {
       <div className='container'>
         <div className='slider-content overflow-x-hidden'>
           <Slider {...settings}>
-            <div className='slider-item'>
-              <img src = {sliderImgs[0]} alt = "" />
+            <div className='slider-item' >
+              <img src = {sliderImgs[1]} alt = "" />
             </div>
             <div className='slider-item'>
-              <img src = {sliderImgs[1]} alt = "" />
+              <img src = {sliderImgs[0]} alt = "" />
             </div>
           </Slider>
         </div>

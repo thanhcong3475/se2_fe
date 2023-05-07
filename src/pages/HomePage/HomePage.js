@@ -10,66 +10,61 @@ import { STATUS } from '../../utils/status';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  let productss = useSelector(getAllProducts);
-  const [products, setProducts] = useState(productss)
   const categories = useSelector(getAllCategories);
   const productStatus = useSelector(getAllProductsStatus);
-
   useEffect(() => {
     dispatch(fetchAsyncProducts(20));  
   }, []);
-
-  // setProductss(products)
+  let productss = useSelector(getAllProducts);
   
+  const [products, setProducts] = useState([])
+  
+  
+  let productCopy = [...productss]
   const handleSortByNameAtoZ = () => {
-    let productCopy = [...productss]
     productCopy.sort((a, b) => {
       let title1 = a.title
       let title2 = b.title
       return (title1).localeCompare(title2)
     })
+    productss = []
     setProducts(productCopy)
-    // products = productCopy
-    // products = productss
   }
-
+  console.log(products)
   const handleSortByNameZtoA = () => {
-    const productCopy = [...products]
     productCopy.sort((a, b) => {
       let title1 = a.title
       let title2 = b.title
       return (title2).localeCompare(title1)
     })
+    productss = []
     setProducts(productCopy)
-    // products = productss
   }
 
   const handleSortByPriceLowest = () => {
-    const productCopy = [...products]
     productCopy.sort((a, b) => {
       let priceA = (a.price) - (a.price * (a.discountPercentage / 100))
       let priceB = (b.price) - (b.price * (b.discountPercentage / 100))
       return (priceA) - (priceB)
     })
+    productss = []
     setProducts(productCopy)
-    // products = productss
   }
 
   const handleSortByPriceHighest = () => {
-    const productCopy = [...products]
     productCopy.sort((a, b) => {
       let priceA = (a.price) - (a.price * (a.discountPercentage / 100))
       let priceB = (b.price) - (b.price * (b.discountPercentage / 100))
       return (priceB) - (priceA)
     })
+    productss = []
     setProducts(productCopy)
-    // products = productss
   }
 
-  let catProductsOne = products.filter(product => product.category === categories[0]);
-  let catProductsTwo = products.filter(product => product.category === categories[1]);
-  let catProductsThree = products.filter(product => product.category === categories[2]);
-  let catProductsFour = products.filter(product => product.category === categories[3]);
+  let catProductsOne = productss.filter(product => product.category === categories[0]);
+  let catProductsTwo = productss.filter(product => product.category === categories[1]);
+  let catProductsThree = productss.filter(product => product.category === categories[2]);
+  let catProductsFour = productss.filter(product => product.category === categories[3]);
 
   return (
     <main>
@@ -91,7 +86,7 @@ const HomePage = () => {
   </ul>
 </div>
               </div>
-              { productStatus === STATUS.LOADING ? <Loader /> : <ProductList products = {products} />}
+              { productStatus === STATUS.LOADING ? <Loader /> : <ProductList products = {products.length > 0 ? products : productss} />}
             </div>
 
             <div className='categories-item'>
